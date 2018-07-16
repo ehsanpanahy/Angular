@@ -33,11 +33,14 @@ import { HomeComponent } from './home/home.component';
 import { AboutComponent } from './about/about.component';
 import { ContactComponent } from './contact/contact.component';
 
+import { baseURL} from './shared/baseurl'
+
 // Importing Services
 import { DishService } from './services/dish.service';
 import { PromotionService } from './services/promotion.service';
-import { LeaderService } from './services/leader.service'
-
+import { LeaderService } from './services/leader.service';
+import { ProcessHTTPMsgService } from './services/process-httpmsg.service';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing/app-routing.module';
 import { LoginComponent } from './login/login.component';
@@ -75,10 +78,14 @@ import { LoginComponent } from './login/login.component';
     MatSelectModule,
     MatSlideToggleModule,
     MatProgressSpinnerModule,
-    MatSliderModule
+    MatSliderModule,
+    HttpClientModule
   ],
   providers: [ DishService,
-     PromotionService, LeaderService],
+     PromotionService,
+     LeaderService,
+    { provide: 'BaseURL', useValue: baseURL },
+    ProcessHTTPMsgService],
      entryComponents:[
        LoginComponent
      ],
