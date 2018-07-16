@@ -4,6 +4,8 @@ import { map, catchError } from 'rxjs/operators';
 import { of, Observable } from 'rxjs';
 import { delay } from 'rxjs/operators';
 
+import { Restangular} from 'ngx-restangular';
+
 import { ProcessHTTPMsgService } from './process-httpmsg.service'
 
 import { Dish } from '../shared/dish';
@@ -20,27 +22,25 @@ import { } from './process-httpmsg.service';
 })
 export class DishService {
 
-  constructor( private http: HttpClient,
+  constructor( private restangular: Restangular,
     private proccessHTTPService: ProcessHTTPMsgService) { }
 
   getDishes(): Observable<Dish[]>  {
-    return this.http.get<Dish[]>(baseURL + 'dishes')
-      .pipe(catchError(this.proccessHTTPService.handleError));
+    return this.restangular.all('dishes').getList();
+      
   }
 
   getDish(id: number): Observable<Dish> {
    
-   return this.http.get<Dish>(baseURL + 'dishes/' + id)
-    .pipe(catchError(this.proccessHTTPService.handleError));   
+   return this.restangular.one('dishes', id).get();   
       
     
   }
 
   getFeaturedDish() : Observable<Dish>
   {
-    return this.http.get<Dish[]>(baseURL + 'dishes?featured=true')
-      .pipe(map(dishes => dishes[0]))
-      .pipe(catchError(this.proccessHTTPService.handleError));
+    return this.restangular.all('dishes').getList({feature: true})
+      .pipe(map(dishes => dishes[0]));
   }
 
   getDishId(): Observable<number[] | any> {
