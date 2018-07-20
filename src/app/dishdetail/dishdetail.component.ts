@@ -24,6 +24,7 @@ export class DishdetailComponent implements OnInit {
     commentForm:FormGroup;
     comment: Comment;
     dish: Dish;
+    dishCopy = null;
     dishIds: number[];
     prev: number;
     next: number;
@@ -97,7 +98,10 @@ export class DishdetailComponent implements OnInit {
 
        onSubmit() {
 
-        this.dish.comments.push(this.comment);
+        //this.dish.comments.push(this.comment);
+        this.dishCopy.comments.push(this.comment);
+        this.dishCopy.save()
+          .subscribe(dish => this.dish = dish);
         this.commentFlag = 0;
         console.log(this.comment);
         this.commentForm.reset ({
@@ -114,7 +118,8 @@ export class DishdetailComponent implements OnInit {
     this.route.params
       .pipe(switchMap((params: Params) => this.dishService.getDish(+params['id'])))
       .subscribe(dish => {
-        this.dish = dish
+        this.dish = dish;
+        this.dishCopy = dish;
         this.setPrevNext(dish.id);
         },
         errmess => this.errMess = <any>errmess);
